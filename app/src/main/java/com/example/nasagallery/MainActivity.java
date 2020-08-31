@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         mYear = year;
-        mMonth = month;
+        mMonth = month + 1;
         mDay = dayOfMonth;
         String date = getDate();
         Toast.makeText(this, date , Toast.LENGTH_SHORT).show();
@@ -81,11 +81,11 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
     private String getDate() {
         String year = mYear + "", month = mMonth + "", day = mDay + "";
-        if (mYear<0)
+        if (mYear<10)
             year = "0" + year;
-        if (mMonth<0)
+        if (mMonth<10)
             month = "0" + month;
-        if (mDay<0)
+        if (mDay<10)
             day = "0" + day;
 
         return year + "-" + month + "-" + day;
