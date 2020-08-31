@@ -50,11 +50,13 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 }
                 NASAGallery nasa = response.body();
                 assert nasa != null;
-                System.out.println(nasa.getDate());
-                System.out.println(nasa.getTitle());
-                System.out.println(nasa.getHdurl());
-                System.out.println(nasa.getMediaType());
-                System.out.println(nasa.getExplanation());
+                System.out.println("----------------------");
+                System.out.println("DATE: " + nasa.getDate());
+                System.out.println("TITLE: " + nasa.getTitle());
+                System.out.println("URL: " + nasa.getUrl());
+                System.out.println("HD URL: " + nasa.getHdurl());
+                System.out.println("MEDIA TYPE: " + nasa.getMediaType());
+                System.out.println("EXPLANATION: " + nasa.getExplanation());
             }
 
             @Override
