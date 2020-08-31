@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 System.out.println("TITLE: " + nasa.getTitle());
                 System.out.println("URL: " + nasa.getUrl());
                 System.out.println("HD URL: " + nasa.getHdurl());
+                System.out.println("SERVICE VERSION: " + nasa.getServiceVersion());
                 System.out.println("MEDIA TYPE: " + nasa.getMediaType());
                 System.out.println("EXPLANATION: " + nasa.getExplanation());
             }
