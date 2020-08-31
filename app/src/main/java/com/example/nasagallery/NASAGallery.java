@@ -8,9 +8,9 @@ public class NASAGallery {
 
     private final String hdurl;
 
-    private final String mediaType;
+    private final String media_type;
 
-    private final String serviceVersion;
+    private final String service_version;
 
     private final String title;
 
@@ -21,8 +21,8 @@ public class NASAGallery {
         this.date = date;
         this.explanation = explanation;
         this.hdurl = hdurl;
-        this.mediaType = mediaType;
-        this.serviceVersion = serviceVersion;
+        this.media_type = mediaType;
+        this.service_version = serviceVersion;
         this.title = title;
         this.url = url;
     }
@@ -40,11 +40,11 @@ public class NASAGallery {
     }
 
     public String getMediaType() {
-        return mediaType;
+        return media_type;
     }
 
     public String getServiceVersion() {
-        return serviceVersion;
+        return service_version;
     }
 
     public String getTitle() {
