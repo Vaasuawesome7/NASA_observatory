@@ -12,6 +12,8 @@ import androidx.fragment.app.DialogFragment;
 import java.util.Calendar;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -36,8 +38,30 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        NASA_JSON nasa = retrofit.create(NASA_JSON.class);
-        Call<NASAGallery> call = nasa.getObject(date);
+        NASA_JSON nasa_json = retrofit.create(NASA_JSON.class);
+        Call<NASAGallery> call = nasa_json.getObject(date);
+
+        call.enqueue(new Callback<NASAGallery>() {
+            @Override
+            public void onResponse(Call<NASAGallery> call, Response<NASAGallery> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MainActivity.this, "Error " + response.code(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                NASAGallery nasa = response.body();
+                assert nasa != null;
+                System.out.println(nasa.getDate());
+                System.out.println(nasa.getTitle());
+                System.out.println(nasa.getHdurl());
+                System.out.println(nasa.getMediaType());
+                System.out.println(nasa.getExplanation());
+            }
+
+            @Override
+            public void onFailure(Call<NASAGallery> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "System error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

@@ -5,6 +5,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface NASA_JSON {
-    @GET("apod?api_key=kuZRpbmxczf8poKOJk7HrBAgmCDAqZvgrDVxjGo5&date={date}")
+    @GET("apod?api_key=kuZRpbmxczf8poKOJk7HrBAgmCDAqZvgrDVxjGo5")
     Call<NASAGallery> getObject(@Query("date") String date);
 }
