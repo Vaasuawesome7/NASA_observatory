@@ -24,7 +24,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends YouTubeBaseActivity {
+public class NASAAPOD extends YouTubeBaseActivity {
 
     private int mDay, mMonth, mYear;
     private ImageView mNASAPhoto;
@@ -37,7 +37,7 @@ public class MainActivity extends YouTubeBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_nasa_apod);
 
         Calendar c = Calendar.getInstance();
         mDay = c.get(Calendar.DAY_OF_MONTH);
@@ -53,7 +53,7 @@ public class MainActivity extends YouTubeBaseActivity {
             mMonth = month + 1;
             mDay = dayOfMonth;
             String date = getDate();
-            Toast.makeText(MainActivity.this, date , Toast.LENGTH_SHORT).show();
+            Toast.makeText(NASAAPOD.this, date , Toast.LENGTH_SHORT).show();
             initRetrofit(date);
         };
 
@@ -81,7 +81,7 @@ public class MainActivity extends YouTubeBaseActivity {
             @Override
             public void onResponse(Call<NASAGallery> call, Response<NASAGallery> response) {
                 if (!response.isSuccessful()) {
-                    Toast.makeText(MainActivity.this, "Error " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NASAAPOD.this, "Error " + response.code(), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 NASAGallery nasa = response.body();
@@ -112,12 +112,12 @@ public class MainActivity extends YouTubeBaseActivity {
                             youTubePlayer.loadVideo(link);
                             System.out.println("DURATION: " + youTubePlayer.getDurationMillis());
                             youTubePlayer.play();
-                            Toast.makeText(MainActivity.this, "success", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NASAAPOD.this, "success", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-                            Toast.makeText(MainActivity.this, "failure", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NASAAPOD.this, "failure", Toast.LENGTH_SHORT).show();
                         }
 
 
@@ -130,7 +130,7 @@ public class MainActivity extends YouTubeBaseActivity {
 
             @Override
             public void onFailure(Call<NASAGallery> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "System error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(NASAAPOD.this, "System error", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -160,7 +160,7 @@ public class MainActivity extends YouTubeBaseActivity {
         int d = c.get(Calendar.DAY_OF_MONTH);
 
         @SuppressLint("ResourceType") DatePickerDialog dialog = new DatePickerDialog(
-                MainActivity.this,
+                NASAAPOD.this,
                 Color.BLUE,
                 mDateSetListener,
                 y, m, d
