@@ -1,13 +1,20 @@
 package com.example.nasagallery;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerView;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
@@ -17,9 +24,15 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class MainActivity extends YouTubeBaseActivity {
 
     private int mDay, mMonth, mYear;
+    private ImageView mNASAPhoto;
+    private YouTubePlayerView mNASAVideo;
+
+    private String mVideoUrl;
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
+    private YouTubePlayer mYouTubePlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +43,29 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         mDay = c.get(Calendar.DAY_OF_MONTH);
         mMonth = c.get(Calendar.MONTH);
         mYear = c.get(Calendar.YEAR);
+
+        mNASAPhoto = findViewById(R.id.NASA_photo);
+        mNASAVideo = findViewById(R.id.NASA_video);
+        mVideoUrl = "";
+
+        mDateSetListener = (view, year, month, dayOfMonth) -> {
+            mYear = year;
+            mMonth = month + 1;
+            mDay = dayOfMonth;
+            String date = getDate();
+            Toast.makeText(MainActivity.this, date , Toast.LENGTH_SHORT).show();
+            initRetrofit(date);
+        };
+
+
+    }
+
+    private String getLinkFromURL(String mVideoUrl) {
+        int beg = mVideoUrl.lastIndexOf('/') + 1;
+        int end = mVideoUrl.indexOf('?');
+        String link = mVideoUrl.substring(beg, end);
+        System.out.println("THE FINAL KEY: " + link);
+        return link;
     }
 
     private void initRetrofit(String date) {
@@ -58,6 +94,38 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 System.out.println("SERVICE VERSION: " + nasa.getServiceVersion());
                 System.out.println("MEDIA TYPE: " + nasa.getMediaType());
                 System.out.println("EXPLANATION: " + nasa.getExplanation());
+
+                if (isMediaTypeImage(nasa.getMediaType())) {
+                    mNASAPhoto.setVisibility(View.VISIBLE);
+                    String url = nasa.getHdurl();
+                    Picasso.get().load(url).into(mNASAPhoto);
+                }
+                else {
+                    System.out.println("VIDEO");
+                    mNASAVideo.setVisibility(View.VISIBLE);
+                    mVideoUrl = nasa.getUrl();
+                    YouTubePlayer.OnInitializedListener mOnInitializedListener = new YouTubePlayer.OnInitializedListener() {
+                        @Override
+                        public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+                            System.out.println("here" + mVideoUrl);
+                            String link = getLinkFromURL(mVideoUrl);
+                            youTubePlayer.loadVideo(link);
+                            System.out.println("DURATION: " + youTubePlayer.getDurationMillis());
+                            youTubePlayer.play();
+                            Toast.makeText(MainActivity.this, "success", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+                            Toast.makeText(MainActivity.this, "failure", Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    };
+                    mNASAVideo.initialize(YouTubeConfig.getApiKey(), mOnInitializedListener);
+                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(mVideoUrl));
+                    //startActivity(i);
+                }
             }
 
             @Override
@@ -66,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
             }
         });
     }
-
+    /*
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         mYear = year;
@@ -77,9 +145,27 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         initRetrofit(date);
     }
 
+     */
     public void pick(View view) {
+        mNASAPhoto.setVisibility(View.GONE);
+        mNASAVideo.setVisibility(View.GONE);
+        /*
         DialogFragment datePicker = new DatePickerFragment();
-        datePicker.show(getSupportFragmentManager(), "date picker");
+        datePicker.show(ge, "date picker");
+
+         */
+        Calendar c = Calendar.getInstance();
+        int y = c.get(Calendar.YEAR);
+        int m = c.get(Calendar.MONTH);
+        int d = c.get(Calendar.DAY_OF_MONTH);
+
+        @SuppressLint("ResourceType") DatePickerDialog dialog = new DatePickerDialog(
+                MainActivity.this,
+                Color.BLUE,
+                mDateSetListener,
+                y, m, d
+        );
+        dialog.show();
     }
 
     private String getDate() {
@@ -92,5 +178,9 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
             day = "0" + day;
 
         return year + "-" + month + "-" + day;
+    }
+
+    private boolean isMediaTypeImage(String txt) {
+        return txt.equals("image");
     }
 }
