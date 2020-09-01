@@ -33,8 +33,7 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
     private YouTubePlayerView mNASAVideo;
-
-    //YouTubePlayer.OnInitializedListener mOnInitializedListener;
+    private YouTubePlayer myYouTubePlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,14 +104,9 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
                     System.out.println("VIDEO");
                     mNASAVideo.setVisibility(View.VISIBLE);
                     mVideoUrl = nasa.getUrl();
-
-
                     Toast.makeText(NASAAPOD.this, "came", Toast.LENGTH_SHORT).show();
                     mNASAVideo.initialize(YouTubeConfig.getApiKey(), NASAAPOD.this);
                     Toast.makeText(NASAAPOD.this, "here", Toast.LENGTH_SHORT).show();
-
-                    //Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(mVideoUrl));
-                    //startActivity(i);
                 }
             }
 
@@ -122,21 +116,12 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
             }
         });
     }
-    /*
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        mYear = year;
-        mMonth = month + 1;
-        mDay = dayOfMonth;
-        String date = getDate();
-        Toast.makeText(this, date , Toast.LENGTH_SHORT).show();
-        initRetrofit(date);
-    }
 
-     */
     public void pick(View view) {
         mNASAPhoto.setVisibility(View.GONE);
         findViewById(R.id.NASA_video).setVisibility(View.GONE);
+        if (myYouTubePlayer!= null)
+            myYouTubePlayer.release();
         Calendar c = Calendar.getInstance();
         int y = c.get(Calendar.YEAR);
         int m = c.get(Calendar.MONTH);
@@ -172,10 +157,12 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
         System.out.println("here" + mVideoUrl);
         String link = getLinkFromURL(mVideoUrl);
-        //youTubePlayer.loadVideo(link);
+        setPlayer(youTubePlayer);
         System.out.println("DURATION: " + youTubePlayer.getDurationMillis());
-        if (!b)
-            youTubePlayer.cueVideo(link);
+        if (!b) {
+            youTubePlayer.loadVideo(link);
+            youTubePlayer.play();
+        }
         Toast.makeText(NASAAPOD.this, "success", Toast.LENGTH_SHORT).show();
     }
 
@@ -195,5 +182,9 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
 
     protected YouTubePlayer.Provider getProvider() {
         return mNASAVideo;
+    }
+
+    private void setPlayer(YouTubePlayer player) {
+        myYouTubePlayer = player;
     }
 }
