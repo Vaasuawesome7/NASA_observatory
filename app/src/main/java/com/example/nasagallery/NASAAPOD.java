@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,15 +23,18 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class NASAAPOD extends YouTubeBaseActivity {
+public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
+    private static final int RECOVERY_REQUEST = 1;
     private int mDay, mMonth, mYear;
     private ImageView mNASAPhoto;
-    private YouTubePlayerView mNASAVideo;
 
     private String mVideoUrl;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
-    private YouTubePlayer mYouTubePlayer;
+
+    private YouTubePlayerView mNASAVideo;
+
+    //YouTubePlayer.OnInitializedListener mOnInitializedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,6 @@ public class NASAAPOD extends YouTubeBaseActivity {
             Toast.makeText(NASAAPOD.this, date , Toast.LENGTH_SHORT).show();
             initRetrofit(date);
         };
-
 
     }
 
@@ -104,26 +105,13 @@ public class NASAAPOD extends YouTubeBaseActivity {
                     System.out.println("VIDEO");
                     mNASAVideo.setVisibility(View.VISIBLE);
                     mVideoUrl = nasa.getUrl();
-                    YouTubePlayer.OnInitializedListener mOnInitializedListener = new YouTubePlayer.OnInitializedListener() {
-                        @Override
-                        public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-                            System.out.println("here" + mVideoUrl);
-                            String link = getLinkFromURL(mVideoUrl);
-                            youTubePlayer.loadVideo(link);
-                            System.out.println("DURATION: " + youTubePlayer.getDurationMillis());
-                            youTubePlayer.play();
-                            Toast.makeText(NASAAPOD.this, "success", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-                            Toast.makeText(NASAAPOD.this, "failure", Toast.LENGTH_SHORT).show();
-                        }
 
 
-                    };
-                    mNASAVideo.initialize(YouTubeConfig.getApiKey(), mOnInitializedListener);
-                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(mVideoUrl));
+                    Toast.makeText(NASAAPOD.this, "came", Toast.LENGTH_SHORT).show();
+                    mNASAVideo.initialize(YouTubeConfig.getApiKey(), NASAAPOD.this);
+                    Toast.makeText(NASAAPOD.this, "here", Toast.LENGTH_SHORT).show();
+
+                    //Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(mVideoUrl));
                     //startActivity(i);
                 }
             }
@@ -148,12 +136,7 @@ public class NASAAPOD extends YouTubeBaseActivity {
      */
     public void pick(View view) {
         mNASAPhoto.setVisibility(View.GONE);
-        mNASAVideo.setVisibility(View.GONE);
-        /*
-        DialogFragment datePicker = new DatePickerFragment();
-        datePicker.show(ge, "date picker");
-
-         */
+        findViewById(R.id.NASA_video).setVisibility(View.GONE);
         Calendar c = Calendar.getInstance();
         int y = c.get(Calendar.YEAR);
         int m = c.get(Calendar.MONTH);
@@ -182,5 +165,35 @@ public class NASAAPOD extends YouTubeBaseActivity {
 
     private boolean isMediaTypeImage(String txt) {
         return txt.equals("image");
+    }
+
+
+    @Override
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+        System.out.println("here" + mVideoUrl);
+        String link = getLinkFromURL(mVideoUrl);
+        //youTubePlayer.loadVideo(link);
+        System.out.println("DURATION: " + youTubePlayer.getDurationMillis());
+        if (!b)
+            youTubePlayer.cueVideo(link);
+        Toast.makeText(NASAAPOD.this, "success", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RECOVERY_REQUEST) {
+            // Retry initialization if user performed a recovery action
+            getProvider().initialize(YouTubeConfig.getApiKey(), this);
+        }
+    }
+
+    protected YouTubePlayer.Provider getProvider() {
+        return mNASAVideo;
     }
 }
