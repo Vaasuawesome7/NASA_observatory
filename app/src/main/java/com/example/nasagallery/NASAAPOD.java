@@ -101,12 +101,9 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
                     Picasso.get().load(url).into(mNASAPhoto);
                 }
                 else {
-                    System.out.println("VIDEO");
                     mNASAVideo.setVisibility(View.VISIBLE);
                     mVideoUrl = nasa.getUrl();
-                    Toast.makeText(NASAAPOD.this, "came", Toast.LENGTH_SHORT).show();
                     mNASAVideo.initialize(YouTubeConfig.getApiKey(), NASAAPOD.this);
-                    Toast.makeText(NASAAPOD.this, "here", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -119,7 +116,7 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
 
     public void pick(View view) {
         mNASAPhoto.setVisibility(View.GONE);
-        findViewById(R.id.NASA_video).setVisibility(View.GONE);
+        mNASAVideo.setVisibility(View.GONE);
         if (myYouTubePlayer!= null)
             myYouTubePlayer.release();
         Calendar c = Calendar.getInstance();
@@ -155,27 +152,22 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-        System.out.println("here" + mVideoUrl);
         String link = getLinkFromURL(mVideoUrl);
         setPlayer(youTubePlayer);
-        System.out.println("DURATION: " + youTubePlayer.getDurationMillis());
         if (!b) {
             youTubePlayer.loadVideo(link);
             youTubePlayer.play();
         }
-        Toast.makeText(NASAAPOD.this, "success", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RECOVERY_REQUEST) {
-            // Retry initialization if user performed a recovery action
             getProvider().initialize(YouTubeConfig.getApiKey(), this);
         }
     }
