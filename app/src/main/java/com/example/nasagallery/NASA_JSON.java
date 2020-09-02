@@ -10,7 +10,7 @@ public interface NASA_JSON {
     Call<NASAGallery> getObject(@Query("date") String date);
 
     @GET("/search")
-    Call<NASAImageAndVideo> getSearchResult(@Query("q") String q);
+    Call<ImageAndVideo> getSearchResult(@Query("q") String q);
 
     @GET("/asset/{nasa_id}")
     Call<RecievedItems> getItemFromSearch(@Path("nasa_id") String nasaId);

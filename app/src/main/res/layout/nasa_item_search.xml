@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/my_rect"
+        android:padding="15dp"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/nasa_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/changa_extralight"
+            android:layout_gravity="center"
+            android:text="NASA search result"
+            android:textColor="@android:color/white"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
