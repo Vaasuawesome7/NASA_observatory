@@ -5,10 +5,14 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -58,6 +62,28 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
             initRetrofit(date);
         };
 
+        initNew();
+    }
+
+    private void initNew() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+
+        bottomNavigationView.setSelectedItemId(R.id.nav_apod);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_library:
+                        startActivity(new Intent(getApplicationContext(), NASAImageAndVideo.class));
+                        overridePendingTransition(R.anim.fadein,R.anim.fadeout);
+                        return true;
+                    case R.id.nav_apod:
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
     private String getLinkFromURL(String mVideoUrl) {
@@ -183,8 +209,4 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
         myYouTubePlayer = player;
     }
 
-    public void goTo(View view) {
-        startActivity(new Intent(this, NASAImageAndVideo.class));
-        finish();
-    }
 }

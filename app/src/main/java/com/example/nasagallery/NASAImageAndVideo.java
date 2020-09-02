@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -46,6 +49,8 @@ public class NASAImageAndVideo extends AppCompatActivity {
         mNASAItems.setAdapter(adapter);
 
         implementSearch();
+
+        initNew();
     }
 
     private void setListener() {
@@ -127,8 +132,25 @@ public class NASAImageAndVideo extends AppCompatActivity {
         });
     }
 
-    public void goBack(View view) {
-        startActivity(new Intent(this, NASAAPOD.class));
-        finish();
+
+    private void initNew() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+
+        bottomNavigationView.setSelectedItemId(R.id.nav_library);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_apod:
+                        startActivity(new Intent(getApplicationContext(), NASAAPOD.class));
+                        overridePendingTransition(R.anim.fadein,R.anim.fadeout);
+                        return true;
+                    case R.id.nav_library:
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 }

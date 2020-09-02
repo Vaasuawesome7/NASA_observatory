@@ -3,6 +3,7 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/audiowide</item>
         <item>@font/averia_sans_libre_light</item>
+        <item>@font/bungee_inline</item>
         <item>@font/changa_extralight</item>
     </array>
 </resources>
