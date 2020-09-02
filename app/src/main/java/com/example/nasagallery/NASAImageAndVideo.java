@@ -128,7 +128,7 @@ public class NASAImageAndVideo extends AppCompatActivity {
     }
 
     public void goBack(View view) {
-        startActivity(new Intent(this, NASAImageAndVideo.class));
+        startActivity(new Intent(this, NASAAPOD.class));
         finish();
     }
 }

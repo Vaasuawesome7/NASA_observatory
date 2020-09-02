@@ -6,7 +6,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,12 +55,21 @@ public class SearchResultImage extends AppCompatActivity {
                 }
                 RecievedItems body = response.body();
                 assert body!=null;
-                String link = body.getCollection().getItems().get(0).getHref();
+                String link = body.getCollection().getItems().get(1).getHref();
+                /*
                 Picasso.get()
                         .load(link)
                         .placeholder(R.drawable.ic_launcher_foreground)
                         .into(mNASAImage);
+
+                 */
+                link = "https" + link.substring(4);
+                Glide.with(SearchResultImage.this)
+                        .load(link)
+                        .placeholder(R.drawable.ic_launcher_foreground)
+                        .into(mNASAImage);
                 System.out.println(link);
+                Toast.makeText(SearchResultImage.this, link, Toast.LENGTH_LONG).show();
             }
 
             @Override
