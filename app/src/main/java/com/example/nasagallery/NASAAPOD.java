@@ -98,7 +98,10 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
                 if (isMediaTypeImage(nasa.getMediaType())) {
                     mNASAPhoto.setVisibility(View.VISIBLE);
                     String url = nasa.getHdurl();
-                    Picasso.get().load(url).into(mNASAPhoto);
+                    Picasso.get()
+                            .load(url)
+                            .placeholder(R.drawable.ic_launcher_foreground)
+                            .into(mNASAPhoto);
                 }
                 else {
                     mNASAVideo.setVisibility(View.VISIBLE);
@@ -178,5 +181,10 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
 
     private void setPlayer(YouTubePlayer player) {
         myYouTubePlayer = player;
+    }
+
+    public void goTo(View view) {
+        startActivity(new Intent(this, NASAImageAndVideo.class));
+        finish();
     }
 }

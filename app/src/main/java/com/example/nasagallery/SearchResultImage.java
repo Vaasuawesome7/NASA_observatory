@@ -56,7 +56,10 @@ public class SearchResultImage extends AppCompatActivity {
                 RecievedItems body = response.body();
                 assert body!=null;
                 String link = body.getCollection().getItems().get(0).getHref();
-                Picasso.get().load(link).into(mNASAImage);
+                Picasso.get()
+                        .load(link)
+                        .placeholder(R.drawable.ic_launcher_foreground)
+                        .into(mNASAImage);
                 System.out.println(link);
             }
 

@@ -14,8 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".SearchResultImage" />
-        <activity android:name=".NASAAPOD" />
-        <activity android:name=".NASAImageAndVideo">
+        <activity android:name=".NASAImageAndVideo" />
+        <activity android:name=".NASAAPOD">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
