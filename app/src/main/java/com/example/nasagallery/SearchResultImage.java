@@ -40,7 +40,7 @@ public class SearchResultImage extends AppCompatActivity {
 
     private void initRetrofit() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://images-api.nasa.gov/")
+                .baseUrl("https://images-api.nasa.gov")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
