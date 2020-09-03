@@ -70,14 +70,24 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
             mYear = year;
             mMonth = month + 1;
             mDay = dayOfMonth;
-            String date = getDate();
-            initRetrofit(date);
-            mNASAPhoto.setVisibility(View.GONE);
-            mNASAVideo.setVisibility(View.GONE);
-            mNASATitle.setText("");
-            mNASAExplanation.setText("");
-            if (myYouTubePlayer!= null)
-                myYouTubePlayer.release();
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month);
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth-1);
+            if (calendar.before(Calendar.getInstance())) {
+                String date = getDate();
+                initRetrofit(date);
+                mNASAPhoto.setVisibility(View.GONE);
+                mNASAVideo.setVisibility(View.GONE);
+                mNASATitle.setText("");
+                mNASAExplanation.setText("");
+                if (myYouTubePlayer != null)
+                    myYouTubePlayer.release();
+            }
+            else {
+                loadingAlert.dismissDialog();
+                Toast.makeText(this, "Enter a day before or on today", Toast.LENGTH_SHORT).show();
+            }
         };
 
         initNew();
@@ -124,7 +134,8 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
             @Override
             public void onResponse(Call<NASAGallery> call, Response<NASAGallery> response) {
                 if (!response.isSuccessful()) {
-                    Toast.makeText(NASAAPOD.this, "Error " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NASAAPOD.this, "Error " + response.code() + ", picture may not be available on servers", Toast.LENGTH_SHORT).show();
+                    loadingAlert.dismissDialog();
                     return;
                 }
                 NASAGallery nasa = response.body();
@@ -152,6 +163,7 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
             @Override
             public void onFailure(Call<NASAGallery> call, Throwable t) {
                 Toast.makeText(NASAAPOD.this, "System error", Toast.LENGTH_SHORT).show();
+                loadingAlert.dismissDialog();
             }
         });
     }
