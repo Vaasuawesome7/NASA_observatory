@@ -66,7 +66,7 @@ public class SearchResultImage extends AppCompatActivity {
                 link = "https" + link.substring(4);
                 Glide.with(SearchResultImage.this)
                         .load(link)
-                        .placeholder(R.drawable.antenna)
+                        .placeholder(R.drawable.button_spinner)
                         .into(mNASAImage);
                 System.out.println(link);
                 mNASATitle.setText(mNASAName);

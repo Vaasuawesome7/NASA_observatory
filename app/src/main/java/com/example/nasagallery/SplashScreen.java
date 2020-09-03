@@ -40,7 +40,9 @@ public class SplashScreen extends AppCompatActivity {
         animationView.playAnimation();
         long time = animationView.getDuration();
         apod.setVisibility(View.GONE);
+        apod.setClickable(false);
         lib.setVisibility(View.GONE);
+        lib.setClickable(false);
         apod.startAnimation(fade);
         lib.startAnimation(fade);
         cred.setVisibility(View.VISIBLE);
@@ -68,7 +70,9 @@ public class SplashScreen extends AppCompatActivity {
         animationView.playAnimation();
         long time = animationView.getDuration();
         apod.setVisibility(View.GONE);
+        apod.setClickable(false);
         lib.setVisibility(View.GONE);
+        lib.setClickable(false);
         apod.startAnimation(fade);
         lib.startAnimation(fade);
         cred.setVisibility(View.VISIBLE);

@@ -40,12 +40,16 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
     private YouTubePlayerView mNASAVideo;
     private YouTubePlayer myYouTubePlayer;
 
+    private LoadingAlert loadingAlert;
+
     private MediaPlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nasa_apod);
+
+        loadingAlert = new LoadingAlert(this);
 
         Calendar c = Calendar.getInstance();
         mDay = c.get(Calendar.DAY_OF_MONTH);
@@ -61,6 +65,7 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
         player = MediaPlayer.create(this, R.raw.sound2);
 
         mDateSetListener = (view, year, month, dayOfMonth) -> {
+            loadingAlert.startLoading();
             player.start();
             mYear = year;
             mMonth = month + 1;
@@ -130,10 +135,12 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
                 if (isMediaTypeImage(nasa.getMediaType())) {
                     mNASAPhoto.setVisibility(View.VISIBLE);
                     String url = nasa.getUrl();
-                    Picasso.get()
-                            .load(url)
-                            .placeholder(R.drawable.astronaut)
+                    Picasso picasso = Picasso.get();
+                    picasso.load(url)
+                            .noFade()
+                            .placeholder(R.drawable.button_spinner)
                             .into(mNASAPhoto);
+                    loadingAlert.dismissDialog();
                 }
                 else {
                     mNASAVideo.setVisibility(View.VISIBLE);
@@ -185,6 +192,7 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+        loadingAlert.dismissDialog();
         String link = getLinkFromURL(mVideoUrl);
         setPlayer(youTubePlayer);
         if (!b) {

@@ -25,7 +25,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NASAImageAndVideo extends AppCompatActivity {
 
     private MyAdapter adapter;
-    private RecyclerView mNASAItems;
     private ArrayList<String> mSearchItems, mNASA_IDs, mNASADesc;
     private EditText mSearchBar;
     private MediaPlayer player;
@@ -37,7 +36,7 @@ public class NASAImageAndVideo extends AppCompatActivity {
 
         player = MediaPlayer.create(this, R.raw.sound2);
 
-        mNASAItems = findViewById(R.id.nasa_items);
+        RecyclerView mNASAItems = findViewById(R.id.nasa_items);
         mSearchBar = findViewById(R.id.search);
 
         mSearchBar.setOnClickListener(v -> player.start());
