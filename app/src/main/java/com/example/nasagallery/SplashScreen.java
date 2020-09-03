@@ -19,7 +19,7 @@ public class SplashScreen extends AppCompatActivity {
     private LottieAnimationView animationView;
     private Button apod, lib;
     private Animation fade, fade1;
-    private TextView cred;
+    private TextView cred, welcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +32,7 @@ public class SplashScreen extends AppCompatActivity {
         fade = AnimationUtils.loadAnimation(this, R.anim.fadeout);
         fade1 = AnimationUtils.loadAnimation(this, R.anim.fadein);
         cred = findViewById(R.id.credential);
+        welcome = findViewById(R.id.welcome);
     }
 
     public void apod(View view) {
@@ -47,6 +48,8 @@ public class SplashScreen extends AppCompatActivity {
         lib.startAnimation(fade);
         cred.setVisibility(View.VISIBLE);
         cred.startAnimation(fade1);
+        welcome.setVisibility(View.INVISIBLE);
+        welcome.startAnimation(fade);
         new CountDownTimer(time/2, time/2) {
 
             @Override
@@ -77,6 +80,8 @@ public class SplashScreen extends AppCompatActivity {
         lib.startAnimation(fade);
         cred.setVisibility(View.VISIBLE);
         cred.startAnimation(fade1);
+        welcome.setVisibility(View.INVISIBLE);
+        welcome.startAnimation(fade);
         new CountDownTimer(time/2, time/2) {
 
             @Override
