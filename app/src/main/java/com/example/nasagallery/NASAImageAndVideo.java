@@ -56,7 +56,9 @@ public class NASAImageAndVideo extends AppCompatActivity {
             Intent i = new Intent(NASAImageAndVideo.this, SearchResultImage.class);
             i.putExtra("id", mNASA_IDs.get(pos));
             i.putExtra("desc", mNASADesc.get(pos));
+            i.putExtra("name", mSearchItems.get(pos));
             startActivity(i);
+            overridePendingTransition(R.anim.righttoleft, R.anim.righttoleft1);
         });
     }
 
@@ -87,11 +89,14 @@ public class NASAImageAndVideo extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
         if (text.equals("")) {
+            mSearchItems.clear();
+            mNASADesc.clear();
+            mNASA_IDs.clear();
+
             adapter.notifyDataSetChanged();
             return;
         }
 
-        System.out.println("continue");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://images-api.nasa.gov")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -108,7 +113,6 @@ public class NASAImageAndVideo extends AppCompatActivity {
                 }
                 ImageAndVideo body = response.body();
                 assert body != null;
-                System.out.println(text + " " + body.getCollection().getItems().size());
                 for (int i = 0; i < body.getCollection().getItems().size(); i++) {
                     String name = body.getCollection().getItems().get(i).getData().get(0).getTitle();
                     String description = body.getCollection().getItems().get(i).getData().get(0).getDescription();
@@ -138,6 +142,7 @@ public class NASAImageAndVideo extends AppCompatActivity {
                 case R.id.nav_apod:
                     startActivity(new Intent(getApplicationContext(), NASAAPOD.class));
                     overridePendingTransition(R.anim.fadein,R.anim.fadeout);
+                    finish();
                     return true;
                 case R.id.nav_library:
                     return true;

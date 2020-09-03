@@ -9,24 +9,8 @@
     tools:context=".NASAAPOD"
     tools:openDrawer="start">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/NASABlue"
-        app:menu="@menu/nav_menu"
-        app:itemTextColor="@android:color/white"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        app:itemIconTint="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-
     <ScrollView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         android:paddingBottom="50dp"
@@ -44,17 +28,23 @@
 
             <TextView
                 android:id="@+id/title_of_view"
+                android:textAlignment="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="35sp"
-                android:textColor="@android:color/white" />
+                android:textSize="50sp"
+                android:textStyle="italic"
+                android:fontFamily="@font/audiowide"
+                android:textColor="#FFC107"
+                android:paddingBottom="15dp"/>
 
             <ImageView
                 android:id="@+id/NASA_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:paddingBottom="15dp"
+                android:contentDescription="TODO" />
 
             <view
                 android:id="@+id/NASA_video"
@@ -66,24 +56,50 @@
 
             <TextView
                 android:id="@+id/explanation"
+                android:textAlignment="center"
+                android:paddingTop="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:fontFamily="@font/averia_sans_libre_light"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="25sp"
+                android:paddingBottom="15dp"/>
 
             <Button
                 android:id="@+id/pick_date"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:background="@drawable/button_shape"
+                android:fontFamily="@font/orbitron"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:gravity="bottom|center|center_horizontal|fill|center_vertical"
                 android:onClick="pick"
-                android:text="Choose date" />
+                android:paddingBottom="15dp"
+                android:shadowColor="@android:color/holo_red_light"
+                android:text="Choose date"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="25sp" />
 
         </LinearLayout>
 
     </ScrollView>
 
-
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/NASABlue"
+        app:menu="@menu/nav_menu"
+        app:itemTextColor="@android:color/white"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        app:itemIconTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

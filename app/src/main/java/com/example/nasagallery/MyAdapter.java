@@ -54,14 +54,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
             searchItem = itemView.findViewById(R.id.nasa_item_text);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        int pos = getAdapterPosition();
-                        if (pos != RecyclerView.NO_POSITION)
-                            listener.onItemClick(pos);
-                    }
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    int pos = getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION)
+                        listener.onItemClick(pos);
                 }
             });
         }

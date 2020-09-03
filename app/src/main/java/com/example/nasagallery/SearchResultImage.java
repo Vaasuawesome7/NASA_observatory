@@ -2,6 +2,7 @@ package com.example.nasagallery;
 
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,8 @@ public class SearchResultImage extends AppCompatActivity {
     private String mNASA_ID;
     private String mNASADesc;
     private ImageView mNASAImage;
+    private TextView mNASATitle;
+    private String mNASAName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,16 +30,20 @@ public class SearchResultImage extends AppCompatActivity {
 
         mNASA_ID = "";
         mNASADesc = "";
+        mNASAName = "";
 
         if (getIntent().getExtras() != null) {
             mNASA_ID = getIntent().getExtras().getString("id");
             mNASADesc = getIntent().getExtras().getString("desc");
+            mNASAName = getIntent().getExtras().getString("name");
         }
 
         mNASAImage = findViewById(R.id.nasa_image);
+        mNASATitle = findViewById(R.id.nasa_title);
 
         initRetrofit();
     }
+
 
     private void initRetrofit() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -56,20 +63,13 @@ public class SearchResultImage extends AppCompatActivity {
                 RecievedItems body = response.body();
                 assert body!=null;
                 String link = body.getCollection().getItems().get(1).getHref();
-                /*
-                Picasso.get()
-                        .load(link)
-                        .placeholder(R.drawable.ic_launcher_foreground)
-                        .into(mNASAImage);
-
-                 */
                 link = "https" + link.substring(4);
                 Glide.with(SearchResultImage.this)
                         .load(link)
                         .placeholder(R.drawable.antenna)
                         .into(mNASAImage);
                 System.out.println(link);
-                Toast.makeText(SearchResultImage.this, link, Toast.LENGTH_LONG).show();
+                mNASATitle.setText(mNASAName);
             }
 
             @Override

@@ -66,6 +66,12 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
             String date = getDate();
             Toast.makeText(NASAAPOD.this, date , Toast.LENGTH_SHORT).show();
             initRetrofit(date);
+            mNASAPhoto.setVisibility(View.GONE);
+            mNASAVideo.setVisibility(View.GONE);
+            mNASATitle.setText("");
+            mNASAExplanation.setText("");
+            if (myYouTubePlayer!= null)
+                myYouTubePlayer.release();
         };
 
         initNew();
@@ -83,6 +89,7 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
                     case R.id.nav_library:
                         startActivity(new Intent(getApplicationContext(), NASAImageAndVideo.class));
                         overridePendingTransition(R.anim.fadein,R.anim.fadeout);
+                        finish();
                         return true;
                     case R.id.nav_apod:
                         return true;
@@ -153,12 +160,7 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
     }
 
     public void pick(View view) {
-        mNASAPhoto.setVisibility(View.GONE);
-        mNASAVideo.setVisibility(View.GONE);
-        mNASATitle.setText("");
-        mNASAExplanation.setText("");
-        if (myYouTubePlayer!= null)
-            myYouTubePlayer.release();
+
         Calendar c = Calendar.getInstance();
         int y = c.get(Calendar.YEAR);
         int m = c.get(Calendar.MONTH);
@@ -197,17 +199,20 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
         if (!b) {
             youTubePlayer.loadVideo(link);
             youTubePlayer.play();
+            youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
         }
     }
 
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
+        errorReason.getErrorDialog(NASAAPOD.this, 1);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RECOVERY_REQUEST) {
+            Toast.makeText(this, "here", Toast.LENGTH_SHORT).show();
             getProvider().initialize(YouTubeConfig.getApiKey(), this);
         }
     }
