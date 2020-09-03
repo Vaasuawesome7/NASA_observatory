@@ -66,7 +66,7 @@ public class SearchResultImage extends AppCompatActivity {
                 link = "https" + link.substring(4);
                 Glide.with(SearchResultImage.this)
                         .load(link)
-                        .placeholder(R.drawable.ic_launcher_foreground)
+                        .placeholder(R.drawable.antenna)
                         .into(mNASAImage);
                 System.out.println(link);
                 Toast.makeText(SearchResultImage.this, link, Toast.LENGTH_LONG).show();

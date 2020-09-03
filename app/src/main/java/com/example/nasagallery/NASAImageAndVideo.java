@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,14 +52,11 @@ public class NASAImageAndVideo extends AppCompatActivity {
     }
 
     private void setListener() {
-        adapter.setListener(new MyAdapter.OnNASAItemClickListener() {
-            @Override
-            public void onItemClick(int pos) {
-                Intent i = new Intent(NASAImageAndVideo.this, SearchResultImage.class);
-                i.putExtra("id", mNASA_IDs.get(pos));
-                i.putExtra("desc", mNASADesc.get(pos));
-                startActivity(i);
-            }
+        adapter.setListener(pos -> {
+            Intent i = new Intent(NASAImageAndVideo.this, SearchResultImage.class);
+            i.putExtra("id", mNASA_IDs.get(pos));
+            i.putExtra("desc", mNASADesc.get(pos));
+            startActivity(i);
         });
     }
 
@@ -138,19 +133,16 @@ public class NASAImageAndVideo extends AppCompatActivity {
 
         bottomNavigationView.setSelectedItemId(R.id.nav_library);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.nav_apod:
-                        startActivity(new Intent(getApplicationContext(), NASAAPOD.class));
-                        overridePendingTransition(R.anim.fadein,R.anim.fadeout);
-                        return true;
-                    case R.id.nav_library:
-                        return true;
-                }
-                return false;
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.nav_apod:
+                    startActivity(new Intent(getApplicationContext(), NASAAPOD.class));
+                    overridePendingTransition(R.anim.fadein,R.anim.fadeout);
+                    return true;
+                case R.id.nav_library:
+                    return true;
             }
+            return false;
         });
     }
 }

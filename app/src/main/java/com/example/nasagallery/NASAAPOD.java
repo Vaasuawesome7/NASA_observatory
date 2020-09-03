@@ -135,7 +135,7 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
                     String url = nasa.getUrl();
                     Picasso.get()
                             .load(url)
-                            .placeholder(R.drawable.ic_launcher_foreground)
+                            .placeholder(R.drawable.astronaut)
                             .into(mNASAPhoto);
                 }
                 else {
