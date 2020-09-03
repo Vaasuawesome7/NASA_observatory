@@ -5,7 +5,9 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +30,7 @@ public class NASAImageAndVideo extends AppCompatActivity {
     private ArrayList<String> mSearchItems, mNASA_IDs, mNASADesc;
     private EditText mSearchBar;
     private MediaPlayer player;
+    private LinearLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class NASAImageAndVideo extends AppCompatActivity {
         setContentView(R.layout.activity_nasa_image_and_video);
 
         player = MediaPlayer.create(this, R.raw.sound2);
+        layout = findViewById(R.id.linear_lay);
 
         RecyclerView mNASAItems = findViewById(R.id.nasa_items);
         mSearchBar = findViewById(R.id.search);
@@ -92,6 +96,7 @@ public class NASAImageAndVideo extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                layout.startAnimation(AnimationUtils.loadAnimation(NASAImageAndVideo.this, R.anim.move));
                 initRetrofit(s.toString());
                 if (s.toString().equals("")) {
                     mSearchItems.clear();
@@ -144,6 +149,7 @@ public class NASAImageAndVideo extends AppCompatActivity {
                     mNASA_IDs.add(nasa_id);
                 }
                 adapter.notifyDataSetChanged();
+                layout.startAnimation(AnimationUtils.loadAnimation(NASAImageAndVideo.this, R.anim.move));
             }
 
             @Override
