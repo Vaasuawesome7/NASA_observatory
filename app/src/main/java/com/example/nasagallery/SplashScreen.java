@@ -56,6 +56,7 @@ public class SplashScreen extends AppCompatActivity {
             public void onFinish() {
                 startActivity(new Intent(SplashScreen.this, NASAAPOD.class));
                 MediaPlayer.create(SplashScreen.this, R.raw.start).start();
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 finish();
             }
         }.start();
@@ -83,6 +84,7 @@ public class SplashScreen extends AppCompatActivity {
             public void onFinish() {
                 startActivity(new Intent(SplashScreen.this, NASAImageAndVideo.class));
                 MediaPlayer.create(SplashScreen.this, R.raw.start).start();
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 finish();
             }
         }.start();
