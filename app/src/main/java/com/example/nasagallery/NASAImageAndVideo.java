@@ -1,6 +1,7 @@
 package com.example.nasagallery;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,14 +28,19 @@ public class NASAImageAndVideo extends AppCompatActivity {
     private RecyclerView mNASAItems;
     private ArrayList<String> mSearchItems, mNASA_IDs, mNASADesc;
     private EditText mSearchBar;
+    private MediaPlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nasa_image_and_video);
 
+        player = MediaPlayer.create(this, R.raw.sound2);
+
         mNASAItems = findViewById(R.id.nasa_items);
         mSearchBar = findViewById(R.id.search);
+
+        mSearchBar.setOnClickListener(v -> player.start());
 
         mSearchItems = new ArrayList<>();
         mNASA_IDs = new ArrayList<>();
@@ -57,6 +63,7 @@ public class NASAImageAndVideo extends AppCompatActivity {
             i.putExtra("id", mNASA_IDs.get(pos));
             i.putExtra("desc", mNASADesc.get(pos));
             i.putExtra("name", mSearchItems.get(pos));
+            player.start();
             startActivity(i);
             overridePendingTransition(R.anim.righttoleft, R.anim.righttoleft1);
         });
@@ -138,6 +145,7 @@ public class NASAImageAndVideo extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.nav_library);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            player.start();
             switch (item.getItemId()) {
                 case R.id.nav_apod:
                     startActivity(new Intent(getApplicationContext(), NASAAPOD.class));

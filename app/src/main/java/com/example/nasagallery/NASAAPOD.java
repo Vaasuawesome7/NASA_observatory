@@ -4,14 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.youtube.player.YouTubeBaseActivity;
@@ -42,6 +40,8 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
     private YouTubePlayerView mNASAVideo;
     private YouTubePlayer myYouTubePlayer;
 
+    private MediaPlayer player;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,13 +58,14 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
         mNASATitle = findViewById(R.id.title_of_view);
 
         mVideoUrl = "";
+        player = MediaPlayer.create(this, R.raw.sound2);
 
         mDateSetListener = (view, year, month, dayOfMonth) -> {
+            player.start();
             mYear = year;
             mMonth = month + 1;
             mDay = dayOfMonth;
             String date = getDate();
-            Toast.makeText(NASAAPOD.this, date , Toast.LENGTH_SHORT).show();
             initRetrofit(date);
             mNASAPhoto.setVisibility(View.GONE);
             mNASAVideo.setVisibility(View.GONE);
@@ -82,20 +83,18 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
 
         bottomNavigationView.setSelectedItemId(R.id.nav_apod);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.nav_library:
-                        startActivity(new Intent(getApplicationContext(), NASAImageAndVideo.class));
-                        overridePendingTransition(R.anim.fadein,R.anim.fadeout);
-                        finish();
-                        return true;
-                    case R.id.nav_apod:
-                        return true;
-                }
-                return false;
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            player.start();
+            switch (item.getItemId()) {
+                case R.id.nav_library:
+                    startActivity(new Intent(getApplicationContext(), NASAImageAndVideo.class));
+                    overridePendingTransition(R.anim.fadein,R.anim.fadeout);
+                    finish();
+                    return true;
+                case R.id.nav_apod:
+                    return true;
             }
+            return false;
         });
     }
 
@@ -125,15 +124,6 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
                 }
                 NASAGallery nasa = response.body();
                 assert nasa != null;
-                System.out.println("----------------------");
-                System.out.println("DATE: " + nasa.getDate());
-                System.out.println("TITLE: " + nasa.getTitle());
-                System.out.println("URL: " + nasa.getUrl());
-                System.out.println("HD URL: " + nasa.getHdurl());
-                System.out.println("SERVICE VERSION: " + nasa.getServiceVersion());
-                System.out.println("MEDIA TYPE: " + nasa.getMediaType());
-                System.out.println("EXPLANATION: " + nasa.getExplanation());
-
                 mNASAExplanation.setText(nasa.getExplanation());
                 mNASATitle.setText(nasa.getTitle());
 
@@ -161,6 +151,7 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
 
     public void pick(View view) {
 
+        player.start();
         Calendar c = Calendar.getInstance();
         int y = c.get(Calendar.YEAR);
         int m = c.get(Calendar.MONTH);
