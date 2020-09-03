@@ -73,17 +73,33 @@ public class NASAImageAndVideo extends AppCompatActivity {
         mSearchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                if (s.toString().equals("")) {
+                    mSearchItems.clear();
+                    mNASA_IDs.clear();
+                    mNASADesc.clear();
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if (s.toString().equals("")) {
+                    mSearchItems.clear();
+                    mNASA_IDs.clear();
+                    mNASADesc.clear();
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 initRetrofit(s.toString());
+                if (s.toString().equals("")) {
+                    mSearchItems.clear();
+                    mNASA_IDs.clear();
+                    mNASADesc.clear();
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
     }
