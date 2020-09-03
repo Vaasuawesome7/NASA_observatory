@@ -3,10 +3,12 @@ package com.example.nasagallery;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +31,8 @@ public class NASAImageAndVideo extends AppCompatActivity {
     private ArrayList<String> mSearchItems, mNASA_IDs, mNASADesc;
     private EditText mSearchBar;
     private MediaPlayer player;
-    private LinearLayout layout;
+    private ImageView mSearchImage;
+    private CountDownTimer mCountDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +40,10 @@ public class NASAImageAndVideo extends AppCompatActivity {
         setContentView(R.layout.activity_nasa_image_and_video);
 
         player = MediaPlayer.create(this, R.raw.sound2);
-        layout = findViewById(R.id.linear_lay);
 
         RecyclerView mNASAItems = findViewById(R.id.nasa_items);
         mSearchBar = findViewById(R.id.search);
+        mSearchImage = findViewById(R.id.search_image);
 
         mSearchBar.setOnClickListener(v -> player.start());
 
@@ -95,7 +98,20 @@ public class NASAImageAndVideo extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                initRetrofit(s.toString());
+                mSearchBar.startAnimation(AnimationUtils.loadAnimation(NASAImageAndVideo.this, R.anim.move));
+                if (mCountDownTimer != null)
+                    mCountDownTimer.cancel();
+                mCountDownTimer = new CountDownTimer(2000, 2000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        initRetrofit(s.toString());
+                    }
+                }.start();
                 if (s.toString().equals("")) {
                     mSearchItems.clear();
                     mNASA_IDs.clear();
@@ -147,6 +163,7 @@ public class NASAImageAndVideo extends AppCompatActivity {
                     mNASA_IDs.add(nasa_id);
                 }
                 adapter.notifyDataSetChanged();
+                mSearchImage.startAnimation(AnimationUtils.loadAnimation(NASAImageAndVideo.this, R.anim.rotate));
             }
 
             @Override
