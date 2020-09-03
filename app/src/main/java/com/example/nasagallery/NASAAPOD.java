@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,7 +32,9 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
 
     private static final int RECOVERY_REQUEST = 1;
     private int mDay, mMonth, mYear;
+
     private ImageView mNASAPhoto;
+    private TextView mNASATitle, mNASAExplanation;
 
     private String mVideoUrl;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
@@ -51,6 +54,9 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
 
         mNASAPhoto = findViewById(R.id.NASA_photo);
         mNASAVideo = findViewById(R.id.NASA_video);
+        mNASAExplanation = findViewById(R.id.explanation);
+        mNASATitle = findViewById(R.id.title_of_view);
+
         mVideoUrl = "";
 
         mDateSetListener = (view, year, month, dayOfMonth) -> {
@@ -121,9 +127,12 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
                 System.out.println("MEDIA TYPE: " + nasa.getMediaType());
                 System.out.println("EXPLANATION: " + nasa.getExplanation());
 
+                mNASAExplanation.setText(nasa.getExplanation());
+                mNASATitle.setText(nasa.getTitle());
+
                 if (isMediaTypeImage(nasa.getMediaType())) {
                     mNASAPhoto.setVisibility(View.VISIBLE);
-                    String url = nasa.getHdurl();
+                    String url = nasa.getUrl();
                     Picasso.get()
                             .load(url)
                             .placeholder(R.drawable.ic_launcher_foreground)
@@ -146,6 +155,8 @@ public class NASAAPOD extends YouTubeBaseActivity implements YouTubePlayer.OnIni
     public void pick(View view) {
         mNASAPhoto.setVisibility(View.GONE);
         mNASAVideo.setVisibility(View.GONE);
+        mNASATitle.setText("");
+        mNASAExplanation.setText("");
         if (myYouTubePlayer!= null)
             myYouTubePlayer.release();
         Calendar c = Calendar.getInstance();
