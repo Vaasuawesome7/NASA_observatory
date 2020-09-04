@@ -7,6 +7,6 @@
 
     <stroke
         android:width="5dp"
-        android:color="@android:color/holo_red_light"/>
+        android:color="@color/NASABlue"/>
 
 </shape>
